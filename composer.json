@@ -1,0 +1,16 @@
+{
+  "name": "microfw/microfw",
+  "authors": [
+    {
+      "name": "Андрей",
+      "email": "savrasovan9696@gmaile.com"
+    }
+  ],
+  "require": {
+  },
+  "autoload": {
+    "psr-4": {
+      "microfw\\": ""
+    }
+  }
+}
