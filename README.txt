@@ -11,6 +11,10 @@ Http запросы перенаправляются на Front controller в pu
     Controller по умолчанию: MainController
     Action по умолчанию: indexAction
 
+Для работы с microfw нужно перекинуть .htaccess из корня mickrofw в корень проекта,
+заменить в файле строку RewriteRule ^(.*)$ /public/$1 на RewriteRule ^(.*)$ /microfw/public/$1,
+после чего подключить БД
+
 Для подключения БД нужно настроить файл config_db.php.
 Параметры переопределяются в моделях в папке app/model/
 
