@@ -15,7 +15,7 @@
 </header>
 
 <main>
-    <div class="d-flex container flex-column align-items-center text-start fs-5">
+    <div class="d-flex container flex-column align-items-center text-start fs-4">
         <?php if (isset($content)) echo $content; ?>
     </div>
 </main>
