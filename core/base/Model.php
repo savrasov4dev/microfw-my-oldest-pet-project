@@ -135,7 +135,7 @@ abstract class Model
      */
     public function addOne(array $fields, array $values, string $table = ''): bool
     {
-        $table = isset($table) ?: $this->table;
+        $table = $table ?? $this->table;
 
         $strFields = '';
 
