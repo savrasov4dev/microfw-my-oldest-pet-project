@@ -1,10 +1,10 @@
 <?php
 
-namespace libs\components;
+namespace microfw\libs\components;
 
 class Debug
 {
-    public static function print($var)
+    public static function dbg($var)
     {
         echo "<pre>";
         print_r($var);
@@ -14,7 +14,7 @@ class Debug
     public static function dump($var)
     {
         echo "<pre>";
-        print_r($var);
+        var_dump($var);
         echo "</pre>";
     }
 }
