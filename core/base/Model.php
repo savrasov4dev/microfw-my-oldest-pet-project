@@ -94,6 +94,17 @@ abstract class Model
     }
 
     /**
+     * Добавление элементов по sql запросу
+     * @param string $sql
+     * @param array $params
+     * @return bool
+     */
+    public function addBySql($sql, array $params = []): bool
+    {
+        return $this->pdo->execute($sql, $params);
+    }
+
+    /**
      * Обновляет элемент таблицы по условию
      * По умолчанию стоит текущая таблица
      * Пример записи:
