@@ -46,9 +46,9 @@ abstract class Model
 
     /**
      * Выборка всех данных из таблицы
-     * @return bool
+     * @return array
      */
-    public function findAll(): bool
+    public function findAll(): array
     {
         $sql = "SELECT * FROM $this->table";
         return $this->pdo->query($sql);
