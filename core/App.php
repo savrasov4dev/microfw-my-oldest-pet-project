@@ -34,8 +34,12 @@ class App
         // Пользовательские маршруты должны быть указаны выше основных
 
         // Основные маршруты
+        $router->addRoute('^api/?$', ['controller' => 'api', 'prefix' => 'api']);
+        $router->addRoute('^api/?(?P<controller>[a-z-]+)\/?(?P<action>[a-z-]+)?$', ['prefix' => 'api']);
+
         $router->addRoute('^a-n/?$', ['controller' => 'main', 'prefix' => 'admin']);
         $router->addRoute('^a-n/?(?P<controller>[a-z-]+)?/?(?P<action>[a-z-]+)?$', ['prefix' => 'admin']);
+
         $router->addRoute('^$', ['controller' => 'main', 'action' => 'index']);
         $router->addRoute('^(?P<controller>[a-z-]+)\/?(?P<action>[a-z-]+)?$');
 
