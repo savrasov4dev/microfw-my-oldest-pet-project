@@ -58,13 +58,17 @@ abstract class Model
      * Нахождение одного элемента по номеру в искомом поле (первичный ключ по умолчанию)
      * @param int $id
      * @param string $field
-     * @return bool
+     * @return array
      */
-    public function findOne(int $id, string $field = ''): bool
+    public function findOne(int $id, string $field = ''): array
     {
         $field = $field ?: $this->pk;
         $sql = "SELECT * FROM $this->table WHERE $field = ? LIMIT 1;";
-        return $this->pdo->query($sql, [$id])[0];
+        $result = $this->pdo->query($sql, [$id]);
+        if (isset($result[0])) {
+            return $result;
+        }
+        return [];
     }
 
     /**
