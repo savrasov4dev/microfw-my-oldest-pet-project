@@ -1,3 +1,4 @@
 .idea
 .git
 *.log
+/config/config_db.php
