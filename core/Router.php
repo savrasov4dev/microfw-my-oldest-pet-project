@@ -115,7 +115,9 @@ class Router
                 $action = $action . 'Action';
                 if ( method_exists($cObj, $action) ) {
                     $cObj->$action();
-                    $cObj->getView();
+                    if (!(isset($this->route['prefix']) && $this->route['prefix'] == 'api')) {
+                        $cObj->getView();
+                    }
                     return true;
                 }
                 throw new Exception("Not found: $action", 404);
