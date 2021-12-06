@@ -7,5 +7,5 @@ use microfw\core\base\Model;
 
 class Main extends Model
 {
-    public $table = 'task';
+    public string $table = 'task';
 }

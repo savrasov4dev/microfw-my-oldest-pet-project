@@ -34,10 +34,17 @@ class App
         // Пользовательские маршруты должны быть указаны выше основных
 
         // Основные маршруты
+
+        $pattern = "(?P<controller>[a-z-]+)\/?(?P<action>[a-z-]+)?\/?(?P<alias>[0-9-a-z-]+)?";
+
+        $router->addRoute('^api/?$', ['controller' => 'api', 'prefix' => 'api']);
+        $router->addRoute("^api/?(?P<controller>[a-z-]+)\/?(?P<alias>[0-9-a-z-]+)?$", ['prefix' => 'api']);
+
         $router->addRoute('^a-n/?$', ['controller' => 'main', 'prefix' => 'admin']);
-        $router->addRoute('^a-n/?(?P<controller>[a-z-]+)?/?(?P<action>[a-z-]+)?$', ['prefix' => 'admin']);
+        $router->addRoute("^a-n/?$pattern$", ['prefix' => 'admin']);
+
         $router->addRoute('^$', ['controller' => 'main', 'action' => 'index']);
-        $router->addRoute('^(?P<controller>[a-z-]+)\/?(?P<action>[a-z-]+)?$');
+        $router->addRoute("^$pattern$");
 
         // Запуск маршрутизатора
         $router->dispatch();

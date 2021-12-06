@@ -15,29 +15,29 @@ abstract class Controller
      * Текущий маршрут
      * @var array
      */
-    public $route = [];
+    public array $route = [];
 
     /**
      * Текущий вид.
      * При переопределении позволяет переключить на пользовательский вид.
-     * При переопределении в fouls - отключает вид
+     * При переопределении в false - отключает вид
      * @var string
      */
-    public $view = '';
+    public string $view = '';
 
     /**
      * Текущий шаблон.
      * При переопределении позволяет переключить на пользовательский шаблон.
-     * При переопределении в fouls - отключает шаблон
+     * При переопределении в false - отключает шаблон
      * @var string
      */
-    public $layout = '';
+    public string $layout = '';
 
     /**
      * Передаваемые во view данные для отображения
      * @var array
      */
-    public $data = [];
+    private array $data = [];
 
     public function __construct(array $route)
     {
@@ -74,10 +74,10 @@ abstract class Controller
 
     /**
      * Подключение только вида
-     * @param $view
+     * @param string $view
      * @param array $data
      */
-    public function loadView($view, $data = []): void
+    public function loadView(string $view, array $data = []): void
     {
         extract($data);
         if (isset($this->route['prefix'])){
