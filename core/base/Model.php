@@ -11,21 +11,21 @@ abstract class Model
 {
     /**
      * Хранит обЪект подключения к БД
-     * @var object
+     * @var Db $pdo
      */
-    private $pdo;
+    private Db $pdo;
 
     /**
      * Текущая таблица
-     * @var string
+     * @var string $table
      */
-    public $table;
+    public string $table;
 
     /**
      * Первичный ключ по умолчанию
-     * @var string
+     * @var string $pk
      */
-    public $pk = 'id';
+    public string $pk = 'id';
 
     /**
      * Подключает базу данных
@@ -46,11 +46,15 @@ abstract class Model
 
     /**
      * Выборка всех данных из таблицы
+     * @param int $limit
      * @return array
      */
-    public function findAll(): array
+    public function findAll(int $limit = null): array
     {
         $sql = "SELECT * FROM $this->table";
+        if (!is_null($limit)) {
+            $sql .= " LIMIT $limit";
+        }
         return $this->pdo->query($sql);
     }
 
@@ -60,9 +64,9 @@ abstract class Model
      * @param string $field
      * @return array
      */
-    public function findOne(int $id, string $field = ''): array
+    public function findOne(int $id, string $field = null): array
     {
-        $field = $field ?: $this->pk;
+        $field = $field ?? $this->pk;
         $sql = "SELECT * FROM $this->table WHERE $field = ? LIMIT 1;";
         $result = $this->pdo->query($sql, [$id]);
         if (isset($result[0])) {
@@ -78,21 +82,21 @@ abstract class Model
      * @param string $table
      * @return array
      */
-    public function findByLike(string $str, string $field, string $table = ''): array
+    public function findByLike(string $str, string $field, string $table = null): array
     {
         $str = "%{$str}%";
-        $table = $table ?: $this->table;
+        $table = $table ?? $this->table;
         $sql = "SELECT * FROM $table WHERE ? LIKE ?;";
         return $this->pdo->query($sql, [$field, $str]);
     }
 
     /**
      * Выборка элементов по sql запросу
-     * @param $sql
+     * @param string $sql
      * @param array $params
      * @return array
      */
-    public function findBySql($sql, array $params = []): array
+    public function findBySql(string $sql, array $params = []): array
     {
         return $this->pdo->query($sql, $params);
     }
@@ -103,44 +107,44 @@ abstract class Model
      * @param array $params
      * @return bool
      */
-    public function addBySql($sql, array $params = []): bool
+    public function addBySql(string $sql, array $params = []): bool
     {
         return $this->pdo->execute($sql, $params);
     }
 
     /**
-     * Обновляет элемент таблицы по условию
-     * По умолчанию стоит текущая таблица
+     * Обновляет элемент таблицы по условию.
+     * По умолчанию стоит текущая таблица.
      * Пример записи:
      * updateOne(['field1' => 'value1', 'field2' => 'value2'], ['id' => 123])
      *
      * @param array $set
-     * @param array $where
+     * @param array $condition
      * @param string $table
      * @return bool
      */
-    public function updateOne(array $set, array $where, string $table = ''): bool
+    public function updateOne(array $set, array $condition, string $table = null): bool
     {
-        $table = isset($table) ?: $this->table;
+        $table = $table ?? $this->table;
 
         $fieldsSet  = array_keys($set);
-        $fieldWhere = array_keys($where);
+        $fieldСondition = array_keys($condition);
 
         $params = array_values($set);
-        foreach ( $where as $value ) { $params[] = $value; }
+        foreach ($condition as $value ) { $params[] = $value; }
 
         $str = '';
         foreach ( $fieldsSet as $field) {
             $str .= "`$field` = ? , ";
         }   $str = preg_replace("~, $~", " ", $str);
 
-        $sql = "UPDATE $table SET $str WHERE `$fieldWhere[0]`= ? ;";
+        $sql = "UPDATE $table SET $str WHERE `$fieldСondition[0]`= ? ;";
         return $this->pdo->execute($sql, $params);
     }
 
     /**
-     * Добавляет элемент в таблицу
-     * По умолчанию стоит текущая таблица
+     * Добавляет элемент в таблицу.
+     * По умолчанию стоит текущая таблица.
      * Пример записи:
      * addOne(['field1', 'field2'], ['value1', 'value2])
      * @param array $fields
@@ -148,21 +152,21 @@ abstract class Model
      * @param string $table
      * @return bool
      */
-    public function addOne(array $fields, array $values, string $table = ''): bool
+    public function addOne(array $fields, array $values, string $table = null): bool
     {
         $table = $table ?? $this->table;
 
         $strFields = '';
 
-        foreach ( $fields as $field) {$strFields .= "`$field` , ";}
+        foreach ( $fields as $field) {$strFields .= "`$field`,";}
         // Удаление лишней запятой
-        $strFields = preg_replace("~, $~", " ", $strFields);
+        $strFields = preg_replace("~,$~", "", $strFields);
 
-        $strValues = str_repeat('?, ', count($values));
+        $strValues = str_repeat('?,', count($values));
         // Удаление лишней запятой
-        $strValues = preg_replace("~, $~", "", $strValues);
+        $strValues = preg_replace("~,$~", "", $strValues);
 
-        $sql = "INSERT INTO $table ( $strFields ) VALUES ( $strValues )";
+        $sql = "INSERT INTO $table ($strFields) VALUES ($strValues)";
         return $this->pdo->execute($sql, $values);
     }
 
@@ -172,9 +176,9 @@ abstract class Model
      * @param string $field
      * @return bool
      */
-    public function deleteOne(int $id, string $field = ''): bool
+    public function deleteOne(int $id, string $field = null): bool
     {
-        $field = isset($field) ?: $this->pk;
+        $field = $field ?? $this->pk;
         $sql = "DELETE FROM $this->table WHERE $field = ? LIMIT 1;";
         return $this->pdo->execute($sql, [$id]);
     }
