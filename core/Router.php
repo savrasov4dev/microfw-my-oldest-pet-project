@@ -109,18 +109,33 @@ class Router
             } else {
                 $controller = "microfw\\app\\controllers\\{$controller}Controller";
             }
-            if ( class_exists( $controller ) ) {
+
+            if (class_exists($controller)) {
+
                 $cObj = new $controller($this->route);
-                $action = self::lowerCamelCase($this->route['action']);
-                $action = $action . 'Action';
-                if ( method_exists($cObj, $action) ) {
-                    $cObj->$action();
-                    if (!(isset($this->route['prefix']) && $this->route['prefix'] == 'api')) {
+
+                if (!(isset($this->route['prefix']) && $this->route['prefix'] == 'api')) {
+
+                    $action = self::lowerCamelCase($this->route['action']);
+
+                    $action = $action . 'Action';
+
+                    if ( method_exists($cObj, $action) ) {
+
+                        if (isset($this->route['alias'])) {
+                            $cObj->$action($this->route['alias']);
+                        } else {
+                            $cObj->$action();
+                        }
+
                         $cObj->getView();
+
+                        return true;
                     }
+                    throw new Exception("Not found: $action", 404);
+                } else {
                     return true;
                 }
-                throw new Exception("Not found: $action", 404);
             }
             throw new Exception("Not found: $controller", 404);
         }
