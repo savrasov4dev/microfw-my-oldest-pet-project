@@ -17,5 +17,6 @@ const VENDOR = ROOT . "/vendor";
 
 const LAYOUT = "default";
 
-use microfw\core\App;
-new App();
+require_once VENDOR . "/autoload.php";
+
+new \microfw\core\App();
