@@ -2,3 +2,5 @@
 .git
 *.log
 /config/config_db.php
+/public/bootstrap/js/*
+/public/bootstrap/css/*
